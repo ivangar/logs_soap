@@ -37,16 +37,7 @@ public class LogsEndpoint {
         GetAllLogsResponse response = new GetAllLogsResponse();
         List<LogEntry> LogEntryList = new ArrayList<>();
         List<LogEntryEntity> logs = logsService.getAllLogs();
-        for (int i = 0; i < logs.size(); i++) {
-            LogEntry log = new LogEntry();
-            LogEntryEntity logEntry = logs.get(i);
-            logEntry.setTimeStamp(logEntry.getTimeStampCol());
-            String type_of_change = String.valueOf(LogEntryType.valueOf(logEntry.getTypeOfChangeCol()));
-            logEntry.setTypeOfChange(type_of_change);
-            BeanUtils.copyProperties(logEntry, log);
-            log.setISRC(logEntry.getIsrc());
-            LogEntryList.add(log);
-        }
+        getLogs(logs, LogEntryList);
         response.getLogEntry().addAll(LogEntryList);
         return response;
     }
@@ -58,17 +49,8 @@ public class LogsEndpoint {
         String to = request.getTo();
         GetAllLogsByDatesResponse response = new GetAllLogsByDatesResponse();
         List<LogEntry> LogEntryList = new ArrayList<>();
-        List<LogEntryEntity> logs = logsService.getAllLogs();
-        for (int i = 0; i < logs.size(); i++) {
-            LogEntry log = new LogEntry();
-            LogEntryEntity logEntry = logs.get(i);
-            logEntry.setTimeStamp(logEntry.getTimeStampCol());
-            String type_of_change = String.valueOf(LogEntryType.valueOf(logEntry.getTypeOfChangeCol()));
-            logEntry.setTypeOfChange(type_of_change);
-            BeanUtils.copyProperties(logEntry, log);
-            log.setISRC(logEntry.getIsrc());
-            LogEntryList.add(log);
-        }
+        List<LogEntryEntity> logs = logsService.getAllLogsByDateRange(from, to);
+        getLogs(logs, LogEntryList);
         response.getLogEntry().addAll(LogEntryList);
         return response;
     }
@@ -79,18 +61,25 @@ public class LogsEndpoint {
         String change = request.getChangeType();
         GetAllLogsByChangeResponse response = new GetAllLogsByChangeResponse();
         List<LogEntry> LogEntryList = new ArrayList<>();
-        List<LogEntryEntity> logs = logsService.getAllLogs();
-        for (int i = 0; i < logs.size(); i++) {
-            LogEntry log = new LogEntry();
-            LogEntryEntity logEntry = logs.get(i);
-            logEntry.setTimeStamp(logEntry.getTimeStampCol());
-            String type_of_change = String.valueOf(LogEntryType.valueOf(logEntry.getTypeOfChangeCol()));
-            logEntry.setTypeOfChange(type_of_change);
-            BeanUtils.copyProperties(logEntry, log);
-            log.setISRC(logEntry.getIsrc());
-            LogEntryList.add(log);
-        }
+        List<LogEntryEntity> logs = logsService.getAllLogsByChangeType(LogEntryType.getValue(change.toUpperCase()));
+        getLogs(logs, LogEntryList);
         response.getLogEntry().addAll(LogEntryList);
         return response;
+    }
+
+    //Private helper to loop through logs and map manually each log entity with the XML log schema
+    private void getLogs(List<LogEntryEntity> logs, List<LogEntry> LogEntryList) throws DatatypeConfigurationException {
+        for (int i = 0; i < logs.size(); i++) {
+            LogEntry logSchema = new LogEntry();
+            LogEntryEntity logEntity = logs.get(i);
+            logEntity.setTimeStamp(logEntity.getTimeStampCol());
+            String type_of_change = String.valueOf(LogEntryType.valueOf(logEntity.getTypeOfChangeCol()));
+            logEntity.setTypeOfChange(type_of_change);
+            logSchema.setLogId(logEntity.getLogId());
+            logSchema.setISRC(logEntity.getIsrc());
+            logSchema.setTimeStamp(logEntity.getTimeStamp());
+            logSchema.setTypeOfChange(logEntity.getTypeOfChange());
+            LogEntryList.add(logSchema);
+        }
     }
 }
