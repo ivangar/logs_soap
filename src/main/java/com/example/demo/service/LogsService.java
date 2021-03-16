@@ -57,4 +57,41 @@ public class LogsService implements ILogsService{
         }
         return sortedLogs;
     }
+
+    public List<LogEntryEntity> getAllLogsByDateRangeAndChange(String from, String to, int change_type){
+        List<LogEntryEntity> list = new ArrayList<>();
+        List<LogEntryEntity> sortedLogs = new ArrayList<>();
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date fromDate = dateFormat.parse(from);
+            Date toDate = dateFormat.parse(to);
+            Timestamp fromTimestamp = new java.sql.Timestamp(fromDate.getTime());
+            Timestamp toTimestamp = new java.sql.Timestamp(toDate.getTime());
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(toTimestamp.getTime());
+            cal.add(Calendar.HOUR, 24);
+            toTimestamp = new Timestamp(cal.getTime().getTime());
+            logRepository.findBytimeStampColAndTypeOfChange(fromTimestamp, toTimestamp, change_type).forEach(e -> list.add(e));
+            sortedLogs = list.stream()
+                    .sorted((a,b) -> a.getTimeStampCol().compareTo(b.getTimeStampCol())).collect(Collectors.toList());
+            return sortedLogs;
+        } catch(Exception e) { //this generic but you can control another types of exception
+            System.out.println("Exception with dates");
+        }
+        return sortedLogs;
+    }
+/*
+    private void parseDates(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date fromDate = dateFormat.parse(from);
+        Date toDate = dateFormat.parse(to);
+        Timestamp fromTimestamp = new java.sql.Timestamp(fromDate.getTime());
+        Timestamp toTimestamp = new java.sql.Timestamp(toDate.getTime());
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(toTimestamp.getTime());
+        cal.add(Calendar.HOUR, 24);
+        toTimestamp = new Timestamp(cal.getTime().getTime());
+    }
+
+ */
 }

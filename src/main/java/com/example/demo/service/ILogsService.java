@@ -7,4 +7,5 @@ public interface ILogsService {
     List<LogEntryEntity> getAllLogs();
     List<LogEntryEntity> getAllLogsByChangeType(int change_type);
     List<LogEntryEntity> getAllLogsByDateRange(String from, String to);
+    List<LogEntryEntity> getAllLogsByDateRangeAndChange(String from, String to, int change_type);
 }

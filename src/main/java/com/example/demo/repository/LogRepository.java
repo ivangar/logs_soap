@@ -19,5 +19,8 @@ public interface LogRepository extends CrudRepository<LogEntryEntity, Integer> {
     @Query("from LogEntryEntity l where l.timeStampCol >= :from AND l.timeStampCol < :to")
     public Iterable<LogEntryEntity> findBytimeStampCol(@Param("from") Timestamp from, @Param("to") Timestamp to);
 
+    @Query("from LogEntryEntity l where l.timeStampCol >= :from AND l.timeStampCol < :to AND l.typeOfChangeCol=:change")
+    public Iterable<LogEntryEntity> findBytimeStampColAndTypeOfChange(@Param("from") Timestamp from, @Param("to") Timestamp to, @Param("change") int change);
+
     public Iterable<LogEntryEntity> findAllBytimeStampColBetween(Timestamp publicationTimeStart, Timestamp publicationTimeEnd);
 }

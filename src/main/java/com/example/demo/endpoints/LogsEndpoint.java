@@ -16,6 +16,8 @@ import io.spring.guides.gs_producing_web_service.GetAllLogsByDatesRequest;
 import io.spring.guides.gs_producing_web_service.GetAllLogsByDatesResponse;
 import io.spring.guides.gs_producing_web_service.GetAllLogsByChangeRequest;
 import io.spring.guides.gs_producing_web_service.GetAllLogsByChangeResponse;
+import io.spring.guides.gs_producing_web_service.GetAllLogsByByDateAndChangeRequest;
+import io.spring.guides.gs_producing_web_service.GetAllLogsByByDateAndChangeResponse;
 import com.example.demo.service.ILogsService;
 import persistence.helpers.LogEntryType;
 
@@ -62,6 +64,20 @@ public class LogsEndpoint {
         GetAllLogsByChangeResponse response = new GetAllLogsByChangeResponse();
         List<LogEntry> LogEntryList = new ArrayList<>();
         List<LogEntryEntity> logs = logsService.getAllLogsByChangeType(LogEntryType.getValue(change.toUpperCase()));
+        getLogs(logs, LogEntryList);
+        response.getLogEntry().addAll(LogEntryList);
+        return response;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getAllLogsByByDateAndChangeRequest")
+    @ResponsePayload
+    public GetAllLogsByByDateAndChangeResponse getAllLogsByDatesAndByChange(@RequestPayload GetAllLogsByByDateAndChangeRequest request) throws DatatypeConfigurationException {
+        String from = request.getFrom();
+        String to = request.getTo();
+        String change = request.getChangeType();
+        GetAllLogsByByDateAndChangeResponse response = new GetAllLogsByByDateAndChangeResponse();
+        List<LogEntry> LogEntryList = new ArrayList<>();
+        List<LogEntryEntity> logs = logsService.getAllLogsByDateRangeAndChange(from, to, LogEntryType.getValue(change.toUpperCase()));
         getLogs(logs, LogEntryList);
         response.getLogEntry().addAll(LogEntryList);
         return response;

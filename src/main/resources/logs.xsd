@@ -55,4 +55,22 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="getAllLogsByByDateAndChangeRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="from" type="xs:string"/>
+                <xs:element name="to" type="xs:string"/>
+                <xs:element name="change_type" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getAllLogsByByDateAndChangeResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="logEntry" type="tns:logEntry" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
 </xs:schema>
