@@ -18,6 +18,7 @@ import io.spring.guides.gs_producing_web_service.GetLogsResponse;
 import io.spring.guides.gs_producing_web_service.ServiceStatus;
 import com.example.demo.service.ILogsService;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +32,15 @@ public class LogsEndpoint {
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getAllLogsRequest")
     @ResponsePayload
-    public GetAllLogsResponse GetAllLogs() {
+    public GetAllLogsResponse GetAllLogs() throws DatatypeConfigurationException {
         GetAllLogsResponse response = new GetAllLogsResponse();
         List<LogEntry> LogEntryList = new ArrayList<>();
         List<LogEntryEntity> logs = logsService.getAllLogs();
         for (int i = 0; i < logs.size(); i++) {
             LogEntry log = new LogEntry();
-            BeanUtils.copyProperties(logs.get(i), log);
+            LogEntryEntity logEntry = logs.get(i);
+            logEntry.setTimeStamp(logEntry.getTimeStampCol());
+            BeanUtils.copyProperties(logEntry, log);
             LogEntryList.add(log);
         }
         response.getLogEntry().addAll(LogEntryList);
