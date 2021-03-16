@@ -29,7 +29,7 @@ public class LogsEndpoint {
     private ILogsService logsService;
 
 
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetAllLogsRequest")
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getAllLogsRequest")
     @ResponsePayload
     public GetAllLogsResponse GetAllLogs() {
         GetAllLogsResponse response = new GetAllLogsResponse();
