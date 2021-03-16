@@ -73,4 +73,16 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="clearLogsRequest">
+        <xs:complexType/>
+    </xs:element>
+
+    <xs:element name="clearLogsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="logEntry" type="tns:logEntry" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
 </xs:schema>
