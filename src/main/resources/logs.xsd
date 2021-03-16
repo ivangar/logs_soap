@@ -1,0 +1,54 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://spring.io/guides/gs-producing-web-service"
+           targetNamespace="http://spring.io/guides/gs-producing-web-service" elementFormDefault="qualified">
+
+    <xs:element name="getLogsRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="log_id" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getLogsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="logEntry" type="tns:logEntry"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="logEntry">
+        <xs:sequence>
+            <xs:element name="log_id" type="xs:int"/>
+            <xs:element name="time_stamp" type="xs:dateTime"/>
+            <xs:element name="ISRC" type="xs:string"/>
+            <xs:element name="type_of_change" type="tns:type_of_change"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="type_of_change">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CREATE"/>
+            <xs:enumeration value="UPDATE"/>
+            <xs:enumeration value="DELETE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="getAllLogsRequest">
+        <xs:complexType/>
+    </xs:element>
+
+    <xs:element name="getAllLogsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="logEntry" type="tns:logEntry" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="serviceStatus">
+        <xs:sequence>
+            <xs:element name="statusCode" type="xs:string"/>
+            <xs:element name="message" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
