@@ -27,11 +27,15 @@ public class LogEntryEntity {
     @Transient
     protected XMLGregorianCalendar timeStamp;
 
-    @Column(name = "type_of_change")
-    private int typeOfChange;
-
     @Column(name = "ISRC")
     private String isrc;
+
+    @Column(name = "type_of_change")
+    private int typeOfChangeCol;
+
+    @XmlSchemaType(name = "string")
+    @Transient
+    private String typeOfChange;
 
     public XMLGregorianCalendar getTimeStamp() {
         return timeStamp;
@@ -47,6 +51,14 @@ public class LogEntryEntity {
                 gc.get(GregorianCalendar.HOUR_OF_DAY),
                 gc.get(GregorianCalendar.MINUTE),
                 gc.get(GregorianCalendar.SECOND), DatatypeConstants.FIELD_UNDEFINED, DatatypeConstants.FIELD_UNDEFINED);
+    }
+
+    public void setTypeOfChange(String typeOfChange) {
+        this.typeOfChange = typeOfChange;
+    }
+
+    public String getTypeOfChange(){
+        return typeOfChange;
     }
 
     public int getLogId() {
@@ -66,12 +78,12 @@ public class LogEntryEntity {
     }
 
 
-    public int getTypeOfChange() {
-        return typeOfChange;
+    public int getTypeOfChangeCol() {
+        return typeOfChangeCol;
     }
 
-    public void setTypeOfChange(int typeOfChange) {
-        this.typeOfChange = typeOfChange;
+    public void setTypeOfChangeCol(int typeOfChangeCol) {
+        this.typeOfChangeCol = typeOfChangeCol;
     }
 
     public String getIsrc() {
